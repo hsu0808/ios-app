@@ -17,7 +17,8 @@ class ViewController: UIViewController, GCDAsyncSocketDelegate {
     
     @IBOutlet weak var addressTextField: UITextField!
     @IBOutlet weak var portTextField: UITextField!
-    @IBOutlet weak var messageTextField: UITextField!
+    @IBOutlet weak var character: UITextField!
+    @IBOutlet weak var groupname: UITextField!
     @IBOutlet weak var messageTextView: UITextView!
     
     override func viewDidLoad() {
@@ -66,20 +67,32 @@ class ViewController: UIViewController, GCDAsyncSocketDelegate {
         socket.disconnect()
         
     }
+    
+    
     @IBAction func sendBtn(_ sender:Any)
     {
         //將輸入的文字轉為data格式
-        let data = messageTextField.text?.data(using: .utf8)
-        showMessage(dateString()+"\nClient: " + messageTextField.text! + "\n")
-        socket.write(data!, withTimeout: -1, tag: 0)
+        let data1 = character.text?.data(using: .utf8)
+        showMessage(dateString()+"\nCharacter: " + character.text! + "\n")
+        socket.write(data1!, withTimeout: -1, tag: 0)
+        let data2 = groupname.text?.data(using: .utf8)
+        showMessage(dateString()+"\ngruopname: " + groupname.text! + "\n")
+        socket.write(data2!, withTimeout: -1, tag: 0)
         view.endEditing(true)
-        messageTextField.text = ""
+        character.text = ""
+        groupname.text = ""
     }
+    
+    
     //清除Textview上的資料
     @IBAction func clearBtn(_ sender:Any)
     {
-        messageTextField.text = ""
+        //messageTextField.text = ""
+        messageTextView.text = ""
     }
+    
+     
+    
     //在Textview上顯示訊息
     func showMessage(_ str:String)
     {
@@ -105,6 +118,7 @@ class ViewController: UIViewController, GCDAsyncSocketDelegate {
     {
         let text = String(data:data ,encoding: .utf8)
         
+      
         showMessage(dateString() + "\nServer:" + text! + "\n")
         
         socket.readData(withTimeout: -1, tag: 0)
