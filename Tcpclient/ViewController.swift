@@ -72,15 +72,54 @@ class ViewController: UIViewController, GCDAsyncSocketDelegate {
     @IBAction func sendBtn(_ sender:Any)
     {
         //將輸入的文字轉為data格式
-        let data1 = character.text?.data(using: .utf8)
-        showMessage(dateString()+"\nCharacter: " + character.text! + "\n")
-        socket.write(data1!, withTimeout: -1, tag: 0)
-        let data2 = groupname.text?.data(using: .utf8)
-        showMessage(dateString()+"\ngruopname: " + groupname.text! + "\n")
-        socket.write(data2!, withTimeout: -1, tag: 0)
-        view.endEditing(true)
-        character.text = ""
-        groupname.text = ""
+        let charactertext = character.text
+        
+        if(charactertext == "觀看者")
+        {
+            let data1 = character.text?.data(using: .utf8)
+            
+            showMessage(dateString()+"\nCharacter: " + character.text! + "\n")
+            socket.write(data1!, withTimeout: -1, tag: 0)
+            
+            let data2 = groupname.text?.data(using: .utf8)
+            
+            showMessage(dateString()+"\ngruopname: " + groupname.text! + "\n")
+            socket.write(data2!, withTimeout: -1, tag: 0)
+            view.endEditing(true)
+            //清空輸入
+            character.text = ""
+            groupname.text = ""
+            
+            //切換到watch view
+            DispatchQueue.main.async
+            {
+                self.performSegue(withIdentifier:"watch", sender: self)
+            }
+        }
+        else if(charactertext == "協助者")
+        {
+            let data1 = character.text?.data(using: .utf8)
+            
+            showMessage(dateString()+"\nCharacter: " + character.text! + "\n")
+            socket.write(data1!, withTimeout: -1, tag: 0)
+            
+            let data2 = groupname.text?.data(using: .utf8)
+            
+            showMessage(dateString()+"\ngruopname: " + groupname.text! + "\n")
+            socket.write(data2!, withTimeout: -1, tag: 0)
+            view.endEditing(true)
+            
+            //清空輸入
+            character.text = ""
+            groupname.text = ""
+            
+            //切換到stream view
+            DispatchQueue.main.async
+            {
+                self.performSegue(withIdentifier:"stream", sender: self)
+            }
+        }
+        
     }
     
     
