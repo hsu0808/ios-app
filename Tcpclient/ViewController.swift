@@ -72,9 +72,11 @@ class ViewController: UIViewController, GCDAsyncSocketDelegate {
     @IBAction func sendBtn(_ sender:Any)
     {
         //將輸入的文字轉為data格式
+        let addresstext = addressTextField.text
+        let porttext = portTextField.text
         let charactertext = character.text
         
-        if(charactertext == "觀看者")
+        if((addresstext != "") && (porttext != "") && (charactertext == "觀看者"))
         {
             let data1 = character.text?.data(using: .utf8)
             
@@ -96,7 +98,7 @@ class ViewController: UIViewController, GCDAsyncSocketDelegate {
                 self.performSegue(withIdentifier:"watch", sender: self)
             }
         }
-        else if(charactertext == "協助者")
+        else if((addresstext != "") && (porttext != "") && (charactertext == "協助者"))
         {
             let data1 = character.text?.data(using: .utf8)
             
@@ -156,7 +158,7 @@ class ViewController: UIViewController, GCDAsyncSocketDelegate {
     func socket(_ sock: GCDAsyncSocket,didRead data: Data ,withTag tag:Int)
     {
         let text = String(data:data ,encoding: .utf8)
-        
+        //let url = text
       
         showMessage(dateString() + "\nServer:" + text! + "\n")
         
@@ -176,6 +178,13 @@ class ViewController: UIViewController, GCDAsyncSocketDelegate {
         return date
         
     }
+    func closekeyboard(){
+            self.view.endEditing(true)
+        }
+        
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+            closekeyboard()
+        }
 
 
 }
