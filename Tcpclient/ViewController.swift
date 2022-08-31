@@ -12,7 +12,7 @@ class ViewController: UIViewController, GCDAsyncSocketDelegate {
     
     var socket: GCDAsyncSocket!
     
-    @IBOutlet weak var bindBtn: UIButton!
+   // @IBOutlet weak var bindBtn: UIButton!
     @IBOutlet weak var sendBtn: UIButton!
     
     @IBOutlet weak var addressTextField: UITextField!
@@ -29,7 +29,8 @@ class ViewController: UIViewController, GCDAsyncSocketDelegate {
         socket = GCDAsyncSocket(delegate: self,delegateQueue:DispatchQueue.main)
         
     }
-    @IBAction func connectBtn(_ sender: Any)
+    
+    /*@IBAction func connectBtn(_ sender: Any)
     {
         //設定按鈕選擇與取消選擇
         bindBtn.isSelected = !bindBtn.isSelected
@@ -45,11 +46,12 @@ class ViewController: UIViewController, GCDAsyncSocketDelegate {
         {
             self.bindBtn.tintColor = UIColor.systemBlue
         }
-    }
+        
+    }*/
     //建立連線
     func connect()
     {
-        bindBtn.setTitle("Unbind", for: .normal)
+     //   bindBtn.setTitle("Unbind", for: .normal)
         
         do{
             //綁定在addressTextField與portTextField上所輸入的資料
@@ -63,7 +65,7 @@ class ViewController: UIViewController, GCDAsyncSocketDelegate {
     //中止連線
     func stopConnect()
     {
-        bindBtn.setTitle("Bind", for: .normal)
+       // bindBtn.setTitle("Bind", for: .normal)
         socket.disconnect()
         
     }
@@ -71,34 +73,41 @@ class ViewController: UIViewController, GCDAsyncSocketDelegate {
     
     @IBAction func sendBtn(_ sender:Any)
     {
+        sendBtn.isSelected = !sendBtn.isSelected
+        //選擇按鈕時則進行連線，取消選擇時則中止連線
+        sendBtn.isSelected ? connect() : stopConnect()
         //將輸入的文字轉為data格式
         let addresstext = addressTextField.text
         let porttext = portTextField.text
         let charactertext = character.text
+        let grouptext = groupname.text
         
-        if((addresstext != "") && (porttext != "") && (charactertext == "觀看者"))
+        if((addresstext != "") && (porttext != "") && (charactertext == "H"))
         {
             let data1 = character.text?.data(using: .utf8)
             
             showMessage(dateString()+"\nCharacter: " + character.text! + "\n")
             socket.write(data1!, withTimeout: -1, tag: 0)
             
-            let data2 = groupname.text?.data(using: .utf8)
+            let data2 =  groupname.text?.data(using: .utf8)
             
             showMessage(dateString()+"\ngruopname: " + groupname.text! + "\n")
             socket.write(data2!, withTimeout: -1, tag: 0)
+            //socket.write(grouptext!, withTimeout: -1, tag: 0)
             view.endEditing(true)
             //清空輸入
             character.text = ""
             groupname.text = ""
             
             //切換到watch view
+            /*
             DispatchQueue.main.async
             {
                 self.performSegue(withIdentifier:"watch", sender: self)
             }
+             */
         }
-        else if((addresstext != "") && (porttext != "") && (charactertext == "協助者"))
+        else if((addresstext != "") && (porttext != "") && (charactertext == "A"))
         {
             let data1 = character.text?.data(using: .utf8)
             
@@ -116,10 +125,12 @@ class ViewController: UIViewController, GCDAsyncSocketDelegate {
             groupname.text = ""
             
             //切換到stream view
+            /*
             DispatchQueue.main.async
             {
                 self.performSegue(withIdentifier:"stream", sender: self)
             }
+            */
         }
         
     }
