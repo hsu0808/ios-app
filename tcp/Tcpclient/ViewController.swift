@@ -10,11 +10,11 @@ import CocoaAsyncSocket
 import DropDown
 
 var droptext = "協助者"
-
+var server_return_url:String?
+var readfile:Bool = false
 
 class ViewController: UIViewController, GCDAsyncSocketDelegate {
-    
-    var socket: GCDAsyncSocket!
+        var socket: GCDAsyncSocket!
     
     
     @IBOutlet weak var sendBtn: UIButton!
@@ -34,7 +34,18 @@ class ViewController: UIViewController, GCDAsyncSocketDelegate {
         socket = GCDAsyncSocket(delegate: self,delegateQueue:DispatchQueue.main)
         
         
+        
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+     
+        if(readfile != false)
+        {
+            readInfofromFile()
+        }
+    }
+     
     //下拉式選單
     @IBAction func tapChooseMenuItem(_ sender: UIButton) {//3
         dropDown.dataSource = ["協助者", "求助者", "觀看者"]//4
@@ -89,6 +100,7 @@ class ViewController: UIViewController, GCDAsyncSocketDelegate {
         let down = "}}}\n"
         //let total = "{{{\nToken=\nGroup_Name=test\nAccount=\nPassword=\nRole=V\n}}}\n"
         let testgroup :String = groupname.text!
+        writeInfoToFile(ipaddress: addresstext, port: porttext)
        
         
         if((addresstext != "") && (porttext != "") && (droptext == "觀看者"))
@@ -130,13 +142,6 @@ class ViewController: UIViewController, GCDAsyncSocketDelegate {
             
             //切換到watch view
             
-            DispatchQueue.main.async
-            {
-                self.performSegue(withIdentifier:"watch", sender: self)
-            }
-             
-            stopConnect()
-             
              
         }
         else if((addresstext != "") && (porttext != "") && (droptext == "協助者"))
@@ -178,12 +183,7 @@ class ViewController: UIViewController, GCDAsyncSocketDelegate {
             
             //切換到stream view
             
-            DispatchQueue.main.async
-            {
-                self.performSegue(withIdentifier:"stream", sender: self)
-            }
-             
-            stopConnect()
+           
              
         }
         else if((addresstext != "") && (porttext != "") && (droptext == "求助者"))
@@ -222,14 +222,16 @@ class ViewController: UIViewController, GCDAsyncSocketDelegate {
             groupname.text = ""
             
             //切換到stream view
-            /*
-            DispatchQueue.main.async
-            {
-                self.performSegue(withIdentifier:"watch", sender: self)
-            }
+            
+            print("1")
+            
+            
+                
+                 
+                
+                
+            
              
-            stopConnect()
-             */
              
         }
         
@@ -324,11 +326,41 @@ class ViewController: UIViewController, GCDAsyncSocketDelegate {
     func socket(_ sock: GCDAsyncSocket,didRead data: Data ,withTag tag:Int)
     {
         let text = String(data:data ,encoding: .utf8)
-        //let url = text
-       
+        let urldata1 :String = text!
+        let urldata2 = urldata1.split(separator: "\n")
+        let finalurl = urldata2[3].split(separator: "=")
+        // finalurl[1] 就是我最終要取得的url
         showMessage(dateString() + "\nServer:" + text! + "\n")
-        
+        showMessage(dateString() + "\nServer:" + finalurl[1] + "\n")
+        server_return_url = String(finalurl[1])
+        print("2")
         socket.readData(withTimeout: -1, tag: 0)
+        
+        if(droptext == "協助者")
+        {
+            DispatchQueue.main.async
+            {
+                self.performSegue(withIdentifier:"stream", sender: self)
+                
+            }
+            readfile = true
+            print(server_return_url)
+            
+            stopConnect()
+        }
+        else
+        {
+            DispatchQueue.main.async
+            {
+                self.performSegue(withIdentifier:"watch", sender: self)
+                
+            }
+            readfile = true
+            print(server_return_url)
+            
+            stopConnect()
+        }
+        
         
     }
     //獲取目前時間，並且轉換成String
@@ -352,6 +384,57 @@ class ViewController: UIViewController, GCDAsyncSocketDelegate {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
             closekeyboard()
         }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "watch" {
+            if let nextViewController = segue.destination as? Watchview  {
+                    nextViewController.serverurl = server_return_url! //Or pass any values
+                print("3")
+                    //nextViewController.valueOf123 = 123
+            }
+        }
+    }
+    //將資料寫入檔案
+    func writeInfoToFile(ipaddress: String?,port: String?) -> Bool
+    {
+             var userInfo = ""
+             userInfo += "{\"ipaddress\":\"\(ipaddress!)\","
+             userInfo += "\"port\":\"\(port!)\"}"
+                 
+             print(userInfo)
+             let filename = getDocumentsDirectory().appendingPathComponent("USER_INFO")
+
+             do {
+                 print(filename)
+                 try userInfo.write(to: filename, atomically: true, encoding: String.Encoding.utf8)
+                 return true
+             } catch {
+                    // failed to write file – bad permissions, bad filename, missing permissions, or more likely it can't be converted to the encoding
+                 return false
+             }
+    }
+    func readInfofromFile()
+    {
+        
+        let filename = getDocumentsDirectory().appendingPathComponent("USER_INFO")
+        
+        let data = try? Data(contentsOf: filename)
+        print(data!)
+        if let data = data {
+            let item = NSKeyedUnarchiver.unarchiveObject(with: data) as! String
+            print(item)
+        }
+        
+      
+
+    }
+    func getDocumentsDirectory() -> URL {
+          let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+          return paths[0]
+      }
+     
+    
+    
 
 
 }

@@ -6,6 +6,7 @@ target 'Tcpclient' do
   use_frameworks!
 
 pod 'CocoaAsyncSocket'
+pod 'MobileVLCKit','3.1.2'
   # Pods for Tcpclient
 
 end

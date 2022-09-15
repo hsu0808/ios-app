@@ -148,36 +148,55 @@
         <!--Watchview-->
         <scene sceneID="dyZ-Mq-RvM">
             <objects>
-                <viewController modalPresentationStyle="fullScreen" id="EZX-Td-RKA" customClass="watchview" sceneMemberID="viewController">
+                <viewController modalPresentationStyle="fullScreen" id="EZX-Td-RKA" customClass="Watchview" customModule="Tcpclient" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="cjm-eb-3yc">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z8y-ni-Y8x">
+                                <rect key="frame" x="92" y="813" width="230" height="23"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="play video"/>
+                                <connections>
+                                    <action selector="PlayBtn:" destination="EZX-Td-RKA" eventType="touchUpInside" id="bdE-sm-KRa"/>
+                                </connections>
+                            </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R1k-6h-4XH">
-                                <rect key="frame" x="129" y="729" width="157" height="31"/>
+                                <rect key="frame" x="129" y="831" width="157" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="return"/>
                                 <connections>
+                                    <action selector="returnBtn:" destination="EZX-Td-RKA" eventType="touchUpInside" id="LKv-TD-zbs"/>
                                     <segue destination="BYZ-38-t0r" kind="modal" modalPresentationStyle="fullScreen" id="1Ft-F0-ieK"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="watch" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v8b-fD-DHf">
-                                <rect key="frame" x="186" y="170" width="77" height="21"/>
+                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fUK-eR-XYA">
+                                <rect key="frame" x="20" y="807" width="97" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="66x-ux-reX">
+                                <rect key="frame" x="20" y="0.0" width="374" height="792"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="PBC-NX-dD9"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                     <navigationItem key="navigationItem" id="ikH-Yv-3QX"/>
+                    <connections>
+                        <outlet property="thePlayBtn" destination="Z8y-ni-Y8x" id="NUL-EU-l5u"/>
+                        <outlet property="thePlayerView" destination="66x-ux-reX" id="edh-HA-tk4"/>
+                        <outlet property="theurltext" destination="fUK-eR-XYA" id="XP3-Rh-KGg"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ccs-XN-zFX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1321.7391304347827" y="585.9375"/>
+            <point key="canvasLocation" x="1234.7826086956522" y="585.9375"/>
         </scene>
         <!--Streamview-->
         <scene sceneID="bCU-Yx-Gal">
